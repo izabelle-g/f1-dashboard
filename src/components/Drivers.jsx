@@ -1,18 +1,19 @@
+import Modal from "./Modal.jsx";
+
 const Drivers = (props) => {
     return(
-        <div>
+        <Modal isOpen={isOpen} isClosed={isClosed}>
             <div className="details">
                 <h2>Driver Details</h2>
-                <p> {props.data.name}, {props.data.age}, {props.data.nationality}, {props.data.url} </p>
+                <p>Name: {props.name}</p>
+                <p>Age: {props.age}</p>
+                <p>Nationality: {props.nationality}</p>
+                <p>URL: {props.url}</p>
             </div>
-            <div className="favs">
-                <button>Close</button>
-                <button>Add Favourites</button>
+            <div>
+                <img src={props.image} alt={props.name} />
             </div>
-            <div className="driver-image"> 
-                <img src={props.data.image} alt={props.data.name} />
-            </div>
-        </div>
+        </Modal>
     )
 };
 

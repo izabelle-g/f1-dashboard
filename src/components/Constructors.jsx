@@ -1,20 +1,18 @@
+import Modal from "./Modal";
+
 const Constructors = (props) => {
     return( 
-        <div>
-            <div>
-                <div className="details">
-                    <h2>Constructor Details</h2>
-                    <p> {props.data.name}, {props.data.nationality}, {props.data.url} </p>
-                </div>
-                <div className="buttons">
-                    <button>Close</button>
-                    <button>Add Favorites</button>
-                </div>
+        <Modal isOpen={isOpen} isClosed={isClosed}>
+            <div className="details">
+                <h2>Constructor Details</h2>
+                <p>Name: {props.name}</p>
+                <p>Nationality: {props.nationality} </p>
+                <p>URL: {props.url}</p>
             </div>
             <div>
-                <img src={props.data.image} alt={props.data.name} />
+                <img src={props.image} alt={props.name} />
             </div>
-        </div>
+        </Modal>
     )
 }
 

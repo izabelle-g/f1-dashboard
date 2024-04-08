@@ -1,26 +1,19 @@
-const Circuits = (props) => {
-    return (
-        <div>
-            <div>
-                <div className="details">
-                    <h2>Circuit Details</h2>
-                    <p>{props.data.name}, {props.data.location}, {props.data.country}, {props.data.url} </p>
-                </div>
-                <div className="buttons">
-                    <button>Close</button>
-                    <button>Add Favourites</button>
-                </div>
-            </div>
-            <div>
-                <div className="box-1">
-                    <img src={props.data.pic}/>
-                </div>
-                <div className="box-2">
-                    {props.data.map( )}
-                </div>
+import Modal from "./Modal.jsx";
 
+const Circuits = (props) => {
+    return(
+        <Modal isOpen={isOpen} isClosed={isClosed}>
+            <div className="details">
+                <h2>Circuit Details</h2>
+                <p>Name: {props.name}</p>
+                <p>Location: {props.location}</p>
+                <p>Country: {props.country}</p>
+                <p>URL: {props.url}</p>
             </div>
-        </div>
+            <div>
+                <img src={props.image} alt={props.name} />
+            </div>
+        </Modal>
     )
 };
 
