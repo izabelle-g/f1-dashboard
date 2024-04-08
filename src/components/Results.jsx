@@ -13,9 +13,15 @@ const Results = (props) => {
             </div>
 
             <div>
-                <div></div>
-                <div></div>
-                <div></div>
+                <div className="headings pos">
+                    <h2>Pos</h2>
+                </div>
+                <div>
+                    <h2>Laps</h2>
+                </div>
+                <div>
+                    <h2>Pts</h2>
+                </div>
                 
                 <ul>
                     <ResultsListItem />

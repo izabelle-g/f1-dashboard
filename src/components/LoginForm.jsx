@@ -1,3 +1,6 @@
+import Dashboard from "./Dashboard";
+import React from "react";
+
 const LoginForm = (props) => {
     // TODO:  handleClick will need to change once we figure out the login thingy
     const handleClick = (e) => {
@@ -10,14 +13,14 @@ const LoginForm = (props) => {
 
             <form>
                 <label for="email">Email</label>
-                <input type="email" name="email"/>
+                <input type="email" placeholder="example@mail.com"  name="email"/>
 
                 <label for="pass">Password</label>
-                <input type="password" name="pass"/>
+                <input type="password" placeholder="********"  name="pass"/>
 
                 <div>
                     <button type="button" name="toDashboard" onClick={ handleClick }>Login</button>
-                    <button type="button" name="toRegistration" onClick={ handleClick }>Register</button>
+                    <button type="button" placeholder="********" name="toRegistration" onClick={ handleClick }>Register</button>
                 </div>
             </form>
         </div>
