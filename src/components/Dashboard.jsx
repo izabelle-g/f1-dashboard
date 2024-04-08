@@ -4,6 +4,7 @@ import Display from './Display.jsx';
 import Favourites from './Favourites.jsx';
 import { useState } from 'react'
 import About from './About.jsx';
+import Overview from './Display.jsx';
 
 
 /*const express = require('express');
@@ -15,29 +16,21 @@ app.listen(8080, () => {
     console.log('http://localhost:8080/f1/status');
 });*/
 
-const Dashboard = (props) => {
+const Dashboard = () => {
     // TODO: organize data from supabase
     // TODO: seasons change thing
-    const [view, setView] = useState(["toSeasonRaces"]);
-
-    const changeView = (view) => {
-        setView(view);
-    };
-
+    const [view, setView] = useState(["toOverview"]);
+    const changeView = (view) => setView(view);
+    
     const changeSeason = (season) => {
 
     };
 
-    if(view == "toSeasonRaces"){
+    if(view == "toOverview"){
         return(
             <section>
                 <Header update= { changeView }/>
-                
-                // TODO: change seasons thingie here
-                <div>
-                    <RaceList />
-                    <Display />
-                </div>
+                <Overview />
             </section>
         )
     }
@@ -45,10 +38,7 @@ const Dashboard = (props) => {
         return(
             <section>
                 <Header update= { changeView }/>
-
-                <div>
-                    <About />
-                </div>
+                <About />
             </section>
         )
     }
@@ -56,10 +46,7 @@ const Dashboard = (props) => {
         return(
             <section>
                 <Header update= { changeView }/>
-
-                <div>
-                    <Favourites />
-                </div>
+                <Favourites />
             </section>
         )
     }

@@ -1,10 +1,26 @@
-const Display = (props) => {
-        // TODO: change display area
-    return(
-        <div>
-            <h2>Display</h2>
-        </div>
-    )
+import { useState } from 'react'
+import RaceList from './RaceList';
+
+const Overview = (props) => {
+    const [view, setView] = useState(["results"]);
+    const changeView = (view) => setView(view);
+
+    if(view == "results"){
+        return(
+            <div>
+                <RaceList update={ changeView }/>
+                <Results />
+            </div>
+        )
+    }
+    else if(view == "standings"){
+        return(
+            <div>
+                <RaceList update={ changeView }/>
+                <Standings />
+            </div>
+        )
+    }
 };
 
-export default Display
+export default Overview

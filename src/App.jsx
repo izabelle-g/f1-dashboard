@@ -6,9 +6,7 @@ import './App.css'
 function App() {
   const [screen, setScreen] = useState(["login"]);
 
-  const changeScreen = (page) => {
-    setScreen(page);
-  };
+  const changeScreen = (page) => setScreen(page);
   
   if(screen == "login") return <Login update={ changeScreen }/>
   else if(screen == "toRegistration") return <Registration />
