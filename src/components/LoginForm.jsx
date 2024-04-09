@@ -12,10 +12,10 @@ const LoginForm = (props) => {
             <h2>Login</h2>
 
             <form>
-                <label for="email">Email</label>
+                <label htmlFor="email">Email</label>
                 <input type="email" placeholder="example@mail.com"  name="email"/>
 
-                <label for="pass">Password</label>
+                <label htmlFor="pass">Password</label>
                 <input type="password" placeholder="********"  name="pass"/>
 
                 <div>

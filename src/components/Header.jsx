@@ -6,16 +6,16 @@ const Header = (props) => {
     };
 
     const handleChange = (e) => {
-        // what does a select give back??  is it option?
+        alert(e.target.value);
     };
 
     return(
         <div>
             <h2>F1 Dashboard</h2>
 
-            <label for="seasons">Season</label>
-            <select name="seasons">
-
+            <label htmlFor="seasons">Season</label>
+            <select name="seasons" onChange={ handleChange }>
+                { props.data.map( s => <SeasonList data={s}/>) }
             </select>
 
             <button type="button" name="toFavourites" onClick={ handleClick }>Favourites</button>

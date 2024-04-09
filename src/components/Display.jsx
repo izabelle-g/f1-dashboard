@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import RaceList from './RaceList';
+import Results from './Results';
+import Standings from './Standings';
 
 const Overview = (props) => {
     const [view, setView] = useState(["results"]);

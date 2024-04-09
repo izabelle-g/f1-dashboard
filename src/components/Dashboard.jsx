@@ -1,45 +1,33 @@
-import Header from './Header.jsx';
-import RaceList from './RaceList.jsx';
-import Results from './Results.jsx';
-import Display from './Display.jsx';
-import Favourites from './Favourites.jsx';
-import React, { useState } from 'react'
-import About from './About.jsx';
-import Overview from './Display.jsx';
-import SeasonList from './SeasonList.jsx';
+import Header from './Header.jsx'
+import Overview from './Display.jsx'
+import About from './About.jsx'
+import Favourites from './Favourites.jsx'
+import supabase from '/src/supabaseClient.jsx'
+import { useState, useEffect } from 'react'
 
-
-/*const express = require('express');
-const app = express();
-const router = require('f1-dashboard/src/f1-router.js');
-
-app.listen(8080, () => {
-    console.log('listening on port 8080');
-    console.log('http://localhost:8080/f1/status');
-});*/
-
+/**
+ * A React component to display the dashboard web page.  
+ * The initial page displays the overview of the 2023 Season and can be changed
+ * when a new season year has been selected, or the about and favourites buttons
+ * are clicked.
+ * 
+ * @returns Returns the dashboard html with the appropriate page content.
+ */
 const Dashboard = () => {
-    // TODO: organize data from supabase
-    // TODO: seasons change thing
-    const [view, setView] = useState(["toOverview"]);
+    const [seasons, setSeasons] = useState([]);
+
+    useEffect( () => {
+        selectSeasons(); 
+    }, []);
+
+    // Using the useState from React to switch between displays below the header
+    const [view, setView] = useState([]);
     const changeView = (view) => setView(view);
-    
-    const changeSeason = (season) => {
 
-    };
-
-    if(view == "toOverview"){
+    if(view == "toAbout"){
         return(
             <section>
-                <Header update= { changeView }/>
-                <Overview />
-            </section>
-        )
-    }
-    else if(view == "toAbout"){
-        return(
-            <section>
-                <Header update= { changeView }/>
+                <Header data={ seasons } update= { changeView }/>
                 <About />
             </section>
         )
@@ -47,36 +35,30 @@ const Dashboard = () => {
     else if(view == "toFavourites"){
         return(
             <section>
-                <Header update= { changeView }/>
+                <Header data={ seasons } update= { changeView }/>
                 <Favourites />
             </section>
         )
     }
-
-    return (
-        <div>
-            <section className='header'>
-                <div>
-                    <h2>Season</h2>
-                    <option><SeasonList /></option>
-                </div>
-                <div>
-                    <h2>F1 Dashboard Project</h2>
-                </div>
-                <div>
-                    <button> Favorites </button>
-                    <button> About </button>
-                </div>
-
-            </section>
+    else{
+        return(
             <section>
-                <RaceList />
-                <Results />
+                <Header data={ seasons } update= { changeView }/>
+                <Overview />
             </section>
+        )
+    }
 
-        </div>
-    )
+    async function selectSeasons(){
+        const {data, error} = await supabase
+        .from('seasons')
+        .select('*')
+        .order('year', { ascending: false });
 
-};
+        if(error){ console.error('Failed to retrieve seasons'); return; }
+      
+        setSeasons(data);
+    }
+}
 
 export default Dashboard
