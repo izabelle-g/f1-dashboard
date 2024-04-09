@@ -6,7 +6,7 @@ const Header = (props) => {
     };
 
     const handleChange = (e) => {
-        alert(e.target.value);
+        props.update(e.target.value);
     };
 
     return(
@@ -15,6 +15,7 @@ const Header = (props) => {
 
             <label htmlFor="seasons">Season</label>
             <select name="seasons" onChange={ handleChange }>
+                <option value="">Please select</option>
                 { props.data.map( s => <SeasonList data={s}/>) }
             </select>
 

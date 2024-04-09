@@ -1,5 +1,5 @@
 import Header from './Header.jsx'
-import Overview from './Display.jsx'
+import Overview from './Overview.jsx'
 import About from './About.jsx'
 import Favourites from './Favourites.jsx'
 import supabase from '/src/supabaseClient.jsx'
@@ -14,15 +14,18 @@ import { useState, useEffect } from 'react'
  * @returns Returns the dashboard html with the appropriate page content.
  */
 const Dashboard = () => {
+    // Using the useState from React to switch between displays below the header
+    const [view, setView] = useState([]);
+    const [seasonData, setSeasonData] = useState([]);
     const [seasons, setSeasons] = useState([]);
 
     useEffect( () => {
-        selectSeasons(); 
+        getSeasons(); 
     }, []);
 
-    // Using the useState from React to switch between displays below the header
-    const [view, setView] = useState([]);
     const changeView = (view) => setView(view);
+
+    console.log(view);
 
     if(view == "toAbout"){
         return(
@@ -41,15 +44,23 @@ const Dashboard = () => {
         )
     }
     else{
+        if(view == ''){
+            setView('2023');
+        }
+
+        useEffect( () => {
+            getSeasonData(view);
+        }, []);
+
         return(
             <section>
                 <Header data={ seasons } update= { changeView }/>
-                <Overview />
+                <Overview data={ [view, seasonData] }/>
             </section>
         )
     }
 
-    async function selectSeasons(){
+    async function getSeasons(){
         const {data, error} = await supabase
         .from('seasons')
         .select('*')
@@ -58,6 +69,18 @@ const Dashboard = () => {
         if(error){ console.error('Failed to retrieve seasons'); return; }
       
         setSeasons(data);
+    }
+
+    async function getSeasonData(year){
+        const {data, error} = await supabase
+        .from('races')
+        .select('*, seasons!inner (*), circuits!inner (*)')
+        .eq('seasons.year', year)
+        .order('round', { ascending: true });
+
+        if(error){ console.error('Failed to retrieve races on ' + year + ' Season.'); return; }
+
+        setSeasonData(data);
     }
 }
 

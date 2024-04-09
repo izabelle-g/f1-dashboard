@@ -5,10 +5,10 @@ const Drivers = (props) => {
         <Modal isOpen={isOpen} isClosed={isClosed}>
             <div className="details">
                 <h2>Driver Details</h2>
-                <p>Name: {props.name}</p>
-                <p>Age: {props.age}</p>
-                <p>Nationality: {props.nationality}</p>
-                <p>URL: {props.url}</p>
+                <p>Name: {props.data.name}</p>
+                <p>Age: {props.data.age}</p>
+                <p>Nationality: {props.data.nationality}</p>
+                <p>URL: {props.data.url}</p>
             </div>
             <div>
                 <img src={props.image} alt={props.name} />

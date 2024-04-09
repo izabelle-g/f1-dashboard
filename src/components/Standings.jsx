@@ -8,10 +8,10 @@ const Standings = (props) => {
                 <p>After Round {props.data.round}</p>
             </div>
             <div>
-                <Drivers pos={props.data.pos} name={props.dat.name} pts={props.data.pts} wins={props.data.wins} />
+                <Drivers pos={props.data.pos} name={props.data.name} pts={props.data.pts} wins={props.data.wins} />
             </div>
             <div>
-                <Constructors pos={props.data.pos} name={props.dat.name} pts={props.data.pts} wins={props.data.wins} />
+                <Constructors pos={props.data.pos} name={props.data.name} pts={props.data.pts} wins={props.data.wins} />
             </div>
         </div>
     )
