@@ -5,40 +5,14 @@ import Standings from './Standings';
 import supabase from '/src/supabaseClient.jsx'
 
 const Overview = (props) => {
-    const [view, setView] = useState("results");
-    const [raceInfo, setRaceInfo] = useState([]);
-    const [raceId, setRaceId] = useState("1098");
+    return(
+        <section>
+            <h2>{ props.year} Season</h2>
+            <RaceList races={ props.races }/>
+        </section>
+    );
 
-    const changeView = (view) => {
-        const splitArray = view.split(" ");
-        setRaceId(splitArray[0]);
-        setView(splitArray[1]);
-    }
-
-    useEffect( () => {
-        getRaceInfo(raceId);
-    }, [raceId]);
-
-    if(view == "standings"){
-        return(
-            <div>
-                <RaceList data={ props.data } update={ changeView }/>
-
-                <div>
-                    <Standings />
-                </div>
-            </div>
-        )
-    } else{
-        return(
-            <div>
-                <RaceList data={ props.data } update={ changeView }/>
-
-                <Results data= { raceInfo }/>
-            </div>
-        )
-    }
-
+    /*
     async function getRaceInfo(raceId){
         const {data, error} = await supabase
         .from('races')
@@ -48,7 +22,7 @@ const Overview = (props) => {
         if(error){ console.error('Failed to retrieve race results.'); return; }
 
         setRaceInfo(data[0]);
-    }
+    }*/
 }
 
 export default Overview

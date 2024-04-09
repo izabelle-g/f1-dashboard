@@ -16,7 +16,7 @@ const Header = (props) => {
             <label htmlFor="seasons">Season</label>
             <select name="seasons" onChange={ handleChange }>
                 <option value="">Please select</option>
-                { props.data.map( s => <SeasonList data={s}/>) }
+                { props.seasons.map( s => <SeasonList data={s}/>) }
             </select>
 
             <button type="button" name="toFavourites" onClick={ handleClick }>Favourites</button>

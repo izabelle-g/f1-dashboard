@@ -2,7 +2,7 @@ import React from "react";
 import Modal from "./Modal";
 
 const Favourites = (props) => {
-    return(
+    /*return(
         <Modal isOpen={isOpen} isClosed={isClosed}>
             <div className="header">
                 <h2>Favourites</h2>
@@ -38,7 +38,7 @@ const Favourites = (props) => {
             <button onClick={emptyFaves}>Empty Favorites</button>
 
         </Modal>
-    )
+    )*/
 };
 
 export default Favourites

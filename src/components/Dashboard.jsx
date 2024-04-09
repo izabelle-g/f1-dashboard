@@ -17,48 +17,25 @@ import { useState, useEffect } from 'react'
 const Dashboard = () => {
     // Using the useState from React to switch between displays below the header
     const [view, setView] = useState('2023');
-    const [seasonData, setSeasonData] = useState([]);
     const [seasons, setSeasons] = useState([]);
-    const [results, setResults] = useState([]);
+    const [seasonRaces, setSeasonRaces] = useState([]);
 
-    useEffect( () => {
-        getSeasons(); 
-    }, []);
+    useEffect( () => getSeasons , []);
+    useEffect( () => { getSeasonRaces(view); }, [view]);
+    const updateView = (view) => setView(view);
+    
 
-    const changeView = (view) => setView(view);
+    return(
+        <section className="overview">
+            <Header seasons={ seasons } update={ updateView }/>
+            { changeView(view) }
+        </section>
+    )
 
-    if(view == "toAbout"){
-        return(
-            <section>
-                <Header data={ seasons } update= { changeView }/>
-                <About />
-            </section>
-        )
-    }
-    else if(view == "toFavourites"){
-        return(
-            <section>
-                <Header data={ seasons } update= { changeView }/>
-                <Favourites />
-            </section>
-        )
-    }
-    else{
-        useEffect( () => {
-            getSeasonData(view);
-        }, []);
-
-        return(
-            <section>
-                <Header data={ seasons } update= { changeView }/>
-                <Overview data={ [view, seasonData] }/>
-
-                <div>
-                    <Results data= {results}  />
-                </div>
-            </section>
-   
-        )
+    function changeView(view){
+        if(view == "toFavourites") return <Favourites />;
+        else if(view == "toAbout") return <About />;
+        else return <Overview year={ view } races={ seasonRaces }/>;
     }
 
     async function getSeasons(){
@@ -67,21 +44,21 @@ const Dashboard = () => {
         .select('*')
         .order('year', { ascending: false });
 
-        if(error){ console.error('Failed to retrieve seasons'); return; }
-      
+        if(error){ console.error('Failed to retrieve Seasons list.'); return; }
+
         setSeasons(data);
     }
-
-    async function getSeasonData(year){
+    
+    async function getSeasonRaces(year){
         const {data, error} = await supabase
         .from('races')
-        .select('*, seasons!inner (*), circuits!inner (*)')
-        .eq('seasons.year', year)
+        .select('*, circuits!inner (*)')
+        .eq('year', year)
         .order('round', { ascending: true });
 
-        if(error){ console.error('Failed to retrieve races on ' + year + ' Season.'); return; }
+        if(error){ console.error('Failed to retrieve Season races.'); return; }
 
-        setSeasonData(data);
+        setSeasonRaces(data);
     }
 
 
