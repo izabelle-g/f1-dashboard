@@ -1,22 +1,29 @@
-import QualifyingListItem from "./QualifyingListItem";
 import ResultsListItem from "./ResultsListItem";
+import { useEffect, useState } from "react";
+const Results = (props) => { 
+    const [results, setResults] = useState([]);
 
-const Results = (props) => {
+    useEffect(() => {
+        
     return(
         <div>
             <div className="resultsHeader">
                 <h2>Results</h2>
-                
                 <div className="raceInfo">
+                    <p> {props.races.name} </p>
+                    <p> {props.races.round} </p>
+                    <p> {props.races.year} </p>
+                    <p> {props.circuits.name} </p>
+                    <p> {props.races.date} </p>
+                    <p> {props.races.url} </p>
                 </div>
             </div>
 
             <div>
                 <ul>
-                    <QualifyingListItem />
+                    {}
                 </ul>
             </div>
-
             <div>
                 <div className="headings pos">
                     <h2>Pos</h2>
@@ -29,11 +36,10 @@ const Results = (props) => {
                 </div>
                 
                 <ul>
-                    <ResultsListItem />
+                    <ResultsListItem position={props.position} forename={props.driv} />
                 </ul>
             </div>
         </div>
-    )
-};
-
-export default Results
+    );
+})}
+export default Results;

@@ -1,6 +1,7 @@
 import Header from './Header.jsx'
 import Overview from './Overview.jsx'
 import About from './About.jsx'
+import Results from './Results.jsx'
 import Favourites from './Favourites.jsx'
 import supabase from '/src/supabaseClient.jsx'
 import { useState, useEffect } from 'react'
@@ -18,6 +19,7 @@ const Dashboard = () => {
     const [view, setView] = useState('2023');
     const [seasonData, setSeasonData] = useState([]);
     const [seasons, setSeasons] = useState([]);
+    const [results, setResults] = useState([]);
 
     useEffect( () => {
         getSeasons(); 
@@ -50,7 +52,12 @@ const Dashboard = () => {
             <section>
                 <Header data={ seasons } update= { changeView }/>
                 <Overview data={ [view, seasonData] }/>
+
+                <div>
+                    <Results data= {results}  />
+                </div>
             </section>
+   
         )
     }
 
@@ -76,6 +83,28 @@ const Dashboard = () => {
 
         setSeasonData(data);
     }
+
+
+    async function getResultData(year){
+        const {data: results } = await supabase
+        .from('results')
+        .select('*, raceId:races(*), circuitId:circuits(*), driverId:drivers(*), constructorId:constructors(*)');
+
+        const detailedResults = await Promise.all(results.map(async (r) => {
+            const { data: qualifyingData} = await supabase
+            .from('qualifying')
+            .select('*')
+            .eq('raceId', r.raceId)
+            .eq('driverId', r.driverId)
+            .single();
+
+            return{...r, q: qualifyingData}
+        }));
+
+        setResults(detailedResults);
+    }
 }
+
+
 
 export default Dashboard
