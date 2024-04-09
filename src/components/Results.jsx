@@ -4,8 +4,13 @@ import ResultsListItem from "./ResultsListItem";
 const Results = (props) => {
     return(
         <div>
-            <h2>Results</h2>
-            // TODO: add other info here
+            <div className="resultsHeader">
+                <h2>Results</h2>
+                
+                <div className="raceInfo">
+                </div>
+            </div>
+
             <div>
                 <ul>
                     <QualifyingListItem />

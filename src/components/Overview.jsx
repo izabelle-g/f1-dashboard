@@ -6,7 +6,7 @@ import supabase from '/src/supabaseClient.jsx'
 
 const Overview = (props) => {
     const [view, setView] = useState("results");
-    const [raceData, setRaceData] = useState([]);
+    const [raceInfo, setRaceInfo] = useState([]);
     const [raceId, setRaceId] = useState("1098");
 
     const changeView = (view) => {
@@ -16,41 +16,38 @@ const Overview = (props) => {
     }
 
     useEffect( () => {
-        getRaceData(raceId, view);
-    }, []);
+        getRaceInfo(raceId);
+    }, [raceId]);
 
     if(view == "standings"){
         return(
             <div>
                 <RaceList data={ props.data } update={ changeView }/>
-                <Standings data= { raceData }/>
+
+                <div>
+                    <Standings />
+                </div>
             </div>
         )
     } else{
         return(
             <div>
                 <RaceList data={ props.data } update={ changeView }/>
-                <Results data= { raceData }/>
+
+                <Results data= { raceInfo }/>
             </div>
         )
     }
 
-    // TODO: I know what to do, my brain just can't form it yet.  Will do so after eep
-    async function getRaceData(raceId, view){
-        let orderStr = 'positionOrder';
-        let queryStr = view + '!inner (*), circuits!inner (*), qualifying!inner (*)';
-        if(view == "standings") orderStr = 'position';
-
+    async function getRaceInfo(raceId){
         const {data, error} = await supabase
         .from('races')
-        .select('*, ' + queryStr)
-        .eq('raceId', raceId)
-        .order(orderStr, { referencedTable: view, ascending: true });
+        .select('*, circuits!inner (*)')
+        .eq('raceId', raceId);
 
         if(error){ console.error('Failed to retrieve race results.'); return; }
 
-        setRaceData(data);
-        console.log(data);
+        setRaceInfo(data[0]);
     }
 }
 

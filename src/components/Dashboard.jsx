@@ -15,7 +15,7 @@ import { useState, useEffect } from 'react'
  */
 const Dashboard = () => {
     // Using the useState from React to switch between displays below the header
-    const [view, setView] = useState([]);
+    const [view, setView] = useState('2023');
     const [seasonData, setSeasonData] = useState([]);
     const [seasons, setSeasons] = useState([]);
 
@@ -24,8 +24,6 @@ const Dashboard = () => {
     }, []);
 
     const changeView = (view) => setView(view);
-
-    console.log(view);
 
     if(view == "toAbout"){
         return(
@@ -44,10 +42,6 @@ const Dashboard = () => {
         )
     }
     else{
-        if(view == ''){
-            setView('2023');
-        }
-
         useEffect( () => {
             getSeasonData(view);
         }, []);
