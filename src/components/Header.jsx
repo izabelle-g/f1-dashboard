@@ -1,8 +1,10 @@
+import Results from "./Results";
 import SeasonList from "./SeasonList";
 
 const Header = (props) => {
     const handleClick = (e) => {
-        props.update(e.target.name);
+        // <Results results={results} update={updateView}/>
+        // props.update(e.target.name);
     };
 
     const handleChange = (e) => {

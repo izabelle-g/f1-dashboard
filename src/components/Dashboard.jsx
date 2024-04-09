@@ -1,10 +1,10 @@
 import Header from './Header.jsx'
 import Overview from './Overview.jsx'
 import About from './About.jsx'
-import Results from './Results.jsx'
 import Favourites from './Favourites.jsx'
 import supabase from '/src/supabaseClient.jsx'
 import { useState, useEffect } from 'react'
+import Results from './Results.jsx'
 
 /**
  * A React component to display the dashboard web page.  
@@ -19,9 +19,13 @@ const Dashboard = () => {
     const [view, setView] = useState('2023');
     const [seasons, setSeasons] = useState([]);
     const [seasonRaces, setSeasonRaces] = useState([]);
+    const [results, setResults] = useState([]);
+
 
     useEffect( () => getSeasons , []);
     useEffect( () => { getSeasonRaces(view); }, [view]);
+    useEffect( () => { getResultData(view); }, [view]);
+    useEffect( () => { getResultData(1120)})
     const updateView = (view) => setView(view);
     
 
@@ -29,7 +33,10 @@ const Dashboard = () => {
         <section className="overview">
             <Header seasons={ seasons } update={ updateView }/>
             { changeView(view) }
+            <Results results={ results} />
+
         </section>
+    
     )
 
     function changeView(view){
@@ -61,24 +68,60 @@ const Dashboard = () => {
         setSeasonRaces(data);
     }
 
+    async function getResultData(raceId){
 
-    async function getResultData(year){
-        const {data: results } = await supabase
+        const {data: resultData, error} = await supabase
         .from('results')
-        .select('*, raceId:races(*), circuitId:circuits(*), driverId:drivers(*), constructorId:constructors(*)');
+        .select('*')
+        .eq('raceId', raceId);
 
-        const detailedResults = await Promise.all(results.map(async (r) => {
-            const { data: qualifyingData} = await supabase
+    
+        const combinedResults = await Promise.all(resultData.map(async (r) => {
+
+            const {data: raceData} = await supabase
+            .from('races')
+            .select('name, round, year, date, url, circuitId')
+            .eq('raceId', r.raceId);
+    
+            const {data: circuitData, } = await supabase
+            .from('circuits')
+            .select('name')
+            .eq('circuitId', raceData.circuitId);
+
+            const {data: driverData } = await supabase
+            .from('drivers')
+            .select('forename, surname')
+            .eq('driverId', r.driverId);
+
+            const {data:constructorData } = await supabase
+            .from('constructors')
+            .select('name')
+            .eq('constructorId', r.constructorId);
+
+            const {data:qualifyingData } = await supabase
             .from('qualifying')
-            .select('*')
-            .eq('raceId', r.raceId)
-            .eq('driverId', r.driverId)
-            .single();
+            .select('q1, q2, q3')
+            .eq('constructorId', r.constructorId)
+            .match({raceId: raceId, driverId: r.driverId, constructorId: r.constructorId});
 
-            return{...r, q: qualifyingData}
+            return {
+                ...resultData,
+                ...raceData,
+                ...circuitData,
+                ...driverData,
+                ...constructorData,
+                ...qualifyingData,
+            };
+
         }));
 
-        setResults(detailedResults);
+        if(error){ console.error('Failed to retrieve Season races.'); return; }
+
+        setResults({
+            ...resultData,
+            results: combinedResults,
+        });
+
     }
 }
 
