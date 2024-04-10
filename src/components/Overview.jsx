@@ -7,7 +7,7 @@ import supabase from '/src/supabaseClient.jsx'
 const Overview = (props) => {
     return(
         <section>
-            <h2>{ props.year} Season</h2>
+            <h2>{ props.year} Races</h2>
             <RaceList races={ props.races }/>
         </section>
     );

@@ -7,10 +7,7 @@ const Header = (props) => {
         // props.update(e.target.name);
     };
 
-    const handleChange = (e) => {
-        props.update(e.target.value);
-    };
-
+    const handleChange = (e) => props.update(e.target.value);
     return(
         <div>
             <h2>F1 Dashboard</h2>

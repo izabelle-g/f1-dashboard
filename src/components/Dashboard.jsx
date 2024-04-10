@@ -5,6 +5,7 @@ import Favourites from './Favourites.jsx'
 import supabase from '/src/supabaseClient.jsx'
 import { useState, useEffect } from 'react'
 import Results from './Results.jsx'
+import Standings from './Standings.jsx'
 
 /**
  * A React component to display the dashboard web page.  
@@ -20,12 +21,14 @@ const Dashboard = () => {
     const [seasons, setSeasons] = useState([]);
     const [seasonRaces, setSeasonRaces] = useState([]);
     const [results, setResults] = useState([]);
+    const [standings, setStandings] = useState([]);
 
 
     useEffect( () => getSeasons , []);
     useEffect( () => { getSeasonRaces(view); }, [view]);
     useEffect( () => { getResultData(view); }, [view]);
     useEffect( () => { getResultData(1120)})
+    useEffect( () => { getStandingsData(); }, []);
     const updateView = (view) => setView(view);
     
 
@@ -33,8 +36,6 @@ const Dashboard = () => {
         <section className="overview">
             <Header seasons={ seasons } update={ updateView }/>
             { changeView(view) }
-            <Results results={ results} />
-
         </section>
     
     )
@@ -42,6 +43,8 @@ const Dashboard = () => {
     function changeView(view){
         if(view == "toFavourites") return <Favourites />;
         else if(view == "toAbout") return <About />;
+        else if(view == "toStandings") return <Standings />;
+
         else return <Overview year={ view } races={ seasonRaces }/>;
     }
 
@@ -68,6 +71,17 @@ const Dashboard = () => {
         setSeasonRaces(data);
     }
 
+    async function getStandingsData(raceId){
+        const {data, error} = await supabase
+        .from('races')
+        .select('*, driverStandings!inner (*), drivers!inner (*), constructorStandings!inner (*), constructors!inner (*)')
+        .eq('raceId', raceId);
+
+
+        if(error){ console.error('Failed to retrieve standing races.'); return; }
+        setStandings(data);
+
+    }
     async function getResultData(raceId){
 
         const {data: resultData, error} = await supabase

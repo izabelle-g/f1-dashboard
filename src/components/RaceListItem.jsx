@@ -1,3 +1,4 @@
+import React from "react";
 const RaceListItem = (props) => {
     const handleClick = (e) => props.update(e.target.name);
 
