@@ -20,17 +20,17 @@ const Dashboard = () => {
     const [view, setView] = useState('2023');
     const [seasons, setSeasons] = useState([]);
     const [seasonRaces, setSeasonRaces] = useState([]);
-    const [results, setResults] = useState([]);
-    const [standings, setStandings] = useState([]);
+    const [raceStandings, setRaceStandings] = useState([]);
+    const [raceQualifying, setRaceQualifying] = useState([]);
+    const [curRace, setCurRace] = useState('1098');
+    const [btnView, setBtnView] = useState('results');
 
-
-    useEffect( () => getSeasons , []);
+    useEffect( () => getSeasons, []);
     useEffect( () => { getSeasonRaces(view); }, [view]);
-    useEffect( () => { getResultData(view); }, [view]);
-    useEffect( () => { getResultData(1120)})
-    useEffect( () => { getStandingsData(); }, []);
+    useEffect( () => { getRaceResults(curRace); }, [curRace]);
+    useEffect( () => { getRaceQualifying(curRace); }, [curRace]);
     const updateView = (view) => setView(view);
-    
+    const updateCurRace= (curRace) => { setBtnView(curRace[0]); setCurRace(curRace[1]); };
 
     return(
         <section className="overview">
@@ -43,9 +43,7 @@ const Dashboard = () => {
     function changeView(view){
         if(view == "toFavourites") return <Favourites />;
         else if(view == "toAbout") return <About />;
-        else if(view == "toStandings") return <Standings />;
-
-        else return <Overview year={ view } races={ seasonRaces }/>;
+        else return <Overview year={ view } races={ seasonRaces } btnView={ btnView } curRace={ curRace } results={ raceStandings } qualify={ raceQualifying } update={ updateCurRace }/>;
     }
 
     async function getSeasons(){
@@ -71,71 +69,28 @@ const Dashboard = () => {
         setSeasonRaces(data);
     }
 
-    async function getStandingsData(raceId){
+    async function getRaceResults(race){
         const {data, error} = await supabase
-        .from('races')
-        .select('*, driverStandings!inner (*), drivers!inner (*), constructorStandings!inner (*), constructors!inner (*)')
-        .eq('raceId', raceId);
-
-
-        if(error){ console.error('Failed to retrieve standing races.'); return; }
-        setStandings(data);
-
-    }
-    async function getResultData(raceId){
-
-        const {data: resultData, error} = await supabase
         .from('results')
-        .select('*')
-        .eq('raceId', raceId);
+        .select(`*, drivers!inner (*), constructors!inner (*)`)
+        .eq('raceId', race)
+        .order('positionOrder', { ascending: true });
 
-    
-        const combinedResults = await Promise.all(resultData.map(async (r) => {
+        if(error){ console.error('Failed to retrieve Race Standings with id ' + race); return; }
 
-            const {data: raceData} = await supabase
-            .from('races')
-            .select('name, round, year, date, url, circuitId')
-            .eq('raceId', r.raceId);
-    
-            const {data: circuitData, } = await supabase
-            .from('circuits')
-            .select('name')
-            .eq('circuitId', raceData.circuitId);
+        setRaceStandings(data);
+    }
 
-            const {data: driverData } = await supabase
-            .from('drivers')
-            .select('forename, surname')
-            .eq('driverId', r.driverId);
+    async function getRaceQualifying(race){
+        const {data, error} = await supabase
+        .from('qualifying')
+        .select('*, races!inner (*), drivers!inner (*)')
+        .eq('races.raceId', race)
+        .order('position', { ascending: true });
 
-            const {data:constructorData } = await supabase
-            .from('constructors')
-            .select('name')
-            .eq('constructorId', r.constructorId);
+        if(error){ console.error('Failed to retrieve Qualifying Results with race id ' + race); return; }
 
-            const {data:qualifyingData } = await supabase
-            .from('qualifying')
-            .select('q1, q2, q3')
-            .eq('constructorId', r.constructorId)
-            .match({raceId: raceId, driverId: r.driverId, constructorId: r.constructorId});
-
-            return {
-                ...resultData,
-                ...raceData,
-                ...circuitData,
-                ...driverData,
-                ...constructorData,
-                ...qualifyingData,
-            };
-
-        }));
-
-        if(error){ console.error('Failed to retrieve Season races.'); return; }
-
-        setResults({
-            ...resultData,
-            results: combinedResults,
-        });
-
+        setRaceQualifying(data);
     }
 }
 

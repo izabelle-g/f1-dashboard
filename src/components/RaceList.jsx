@@ -12,7 +12,7 @@ const RaceList = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    { props.races.map( (r) => <RaceListItem race={r}/>) }
+                    { props.races.map( (r) => <RaceListItem race={r} update={ props.update }/>) }
                 </tbody>    
             </table>
         </div>

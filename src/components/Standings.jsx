@@ -2,6 +2,7 @@ import Constructors from "./Constructors";
 import Drivers from "./Drivers";
 
 const Standings = (props) => {
+    /*
     return(
         <section>
             <div>
@@ -40,7 +41,7 @@ const Standings = (props) => {
            </table>
         </section>
     )
-
+*/
 };
 
 export default Standings
