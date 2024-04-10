@@ -2,15 +2,10 @@ import Constructors from "./Constructors";
 import Drivers from "./Drivers";
 
 const Standings = (props) => {
-    /*
+    
     return(
         <section>
-            <div>
-                <h2>Standings</h2>
-                <p>After Round </p>
-            </div>
-           
-           <table className="driver-table">
+           <table className="results">
                 <thead>
                     <tr><h2>Drivers</h2></tr>
                     <tr>
@@ -21,7 +16,7 @@ const Standings = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {props.drivers.map((d) => {<Drivers driver={d} />})}
+                    {props.drivers.map(d => <Drivers driver={d} />  )}
                 </tbody>
            </table>
 
@@ -36,12 +31,12 @@ const Standings = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {props.constructors.map((c) => {<Constructors constructor={c}/>})}
+                    {/* {props.qualify.map((c) => {<Constructors constructor={c}/>})} */}
                 </tbody>
            </table>
         </section>
     )
-*/
+
 };
 
 export default Standings

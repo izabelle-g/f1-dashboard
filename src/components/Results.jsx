@@ -6,6 +6,7 @@ const Results = (props) => {
     return(
         <div>
             <div className="qualify">
+                <h2>Qualifying</h2>
                 <table>
                     <thead>
                         <tr>
@@ -25,7 +26,7 @@ const Results = (props) => {
 
             <div className="results">
                 <ResultsCardItem results={ props.results }/>
-
+                <h2>Results</h2>
                 <table>
                     <thead>
                         <tr>

@@ -20,6 +20,9 @@ const Dashboard = () => {
     const [seasonRaces, setSeasonRaces] = useState([]);
     const [raceStandings, setRaceStandings] = useState([]);
     const [raceQualifying, setRaceQualifying] = useState([]);
+
+    const [driverStanding, setDriverStanding] = useState([]);
+
     const [race, setRace] = useState([]);
     const [curRace, setCurRace] = useState('1098');
     const [btnView, setBtnView] = useState('results');
@@ -28,7 +31,10 @@ const Dashboard = () => {
     useEffect( () => { getSeasonRaces(view); }, [view]);
     useEffect( () => { getRaceResults(curRace); }, [curRace]);
     useEffect( () => { getRaceQualifying(curRace); }, [curRace]);
+    useEffect( () => { getDriverStanding(curRace); }, [curRace]);
+
     useEffect( () => { getRace(curRace); }, [view]);
+
     const updateView = (selectedView) => setView(selectedView);
     const updateCurRace= (curRace) => { setBtnView(curRace[0]); setCurRace(curRace[1]); };
   
@@ -42,7 +48,7 @@ const Dashboard = () => {
     function changeView(view){
         if(view == "toFavourites") return <Favourites />;
         else if(view == "toAbout") return <About />;
-        else return <Overview year={ view } races={ seasonRaces } btnView={ btnView } race={ race[0] } results={ raceStandings } qualify={ raceQualifying } update={ updateCurRace }/>;
+        else return <Overview year={ view } races={ seasonRaces } btnView={ btnView } race={ race[0] } drivers={driverStanding} results={ raceStandings } qualify={ raceQualifying } update={ updateCurRace } />;
     }
 
     async function getSeasons(){
@@ -79,16 +85,28 @@ const Dashboard = () => {
         setRace(data);
     }
 
+    
+
     async function getRaceResults(race){
         const {data, error} = await supabase
         .from('results')
-        .select(`*, drivers!inner (*), constructors!inner (*)`)
+        .select(`*, drivers!driverId (*), constructors!constructorId (*)`)
         .eq('raceId', race)
         .order('positionOrder', { ascending: true });
 
         if(error){ console.error('Failed to retrieve Race Standings with id ' + race); return; }
 
         setRaceStandings(data);
+    }
+
+    async function getDriverStanding(race){
+        const {data, error} = await supabase
+            .from('results')
+            .select(`*, drivers!inner(*), driverStandings!inner (*)`)
+            .eq('raceId', race);
+        if(error){ console.error('Failed to retrieve Standings Drivers with id ' + race); return; }
+        
+        setDriverStanding(data);
     }
 
     async function getRaceQualifying(race){

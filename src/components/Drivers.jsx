@@ -4,10 +4,10 @@ import React from "react";
 const Drivers = (props) => {
     return(    
         <tr>
-            <td>{props.driver.position}</td>
-            <td>{props.driver.forename} {props.driver.forename}</td>
-            <td>{props.driver.points}</td>
-            <td>{props.driver.wins}</td>
+            <td>{props.driver.driverId}</td>
+            {/* <td>{props.driver.driver_standings.forename} {props.driver.driver_standings.forename}</td> */}
+            {/* <td>{props.drivers..points}</td> */}
+            {/* <td>{props.driver.wins}</td> */}
         </tr>
   
         // <Modal isOpen={isOpen} isClosed={isClosed}>

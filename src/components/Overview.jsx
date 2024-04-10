@@ -1,8 +1,16 @@
+import Circuits from './Circuits';
 import RaceList from './RaceList';
 import Results from './Results';
 import Standings from './Standings';
+import { useState } from 'react';
+import Modal from './Modal';
 
 const Overview = (props) => {
+    const [showCircuits, setShowCircuits] = useState(false);
+    const toggleCircuitsVisibility = () => setShowCircuits(!showCircuits);
+    const [showModal, setShowModal] = useState(false);
+    const toggleModal = () => setShowModal(!showModal);
+
 
     if(props.race != undefined){
     return(
@@ -27,7 +35,7 @@ const Overview = (props) => {
                         <p>After Round { props.race.round }</p>
                     </div>
 
-                    <Standings />
+                    <Standings drivers={props.drivers}/>
                 </div>
             )
         }
@@ -40,7 +48,9 @@ const Overview = (props) => {
                                 <p><a href={ props.race.url }>{ props.race.name }</a></p>
                                 <p>Round { props.race.round }</p>
                                 <p>{ props.race.year }</p>
-                                <p><a href={ props.race.circuits.url }>{ props.race.circuits.name }</a></p>
+                                <p><a href="#!" onClick={toggleCircuitsVisibility}>{ props.race.circuits.name }</a></p>
+                                {showCircuits && <Circuits circuit={props.circuits}/>}
+
                                 <p>{ props.race.date }</p>
                             </div>
                     </div>

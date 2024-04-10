@@ -1,22 +1,12 @@
 import {useState} from "react";
 
 
-const Modal = (props) => {
-    const [popUp, setPopUp] = useState(false);
-    //opens up the popup
-    const isOpen = () => {
-        setPopUp(true);
-    };
-    //close the popup
-    const isClosed = () => {
-        setPopUp(false);
-    }
-
+const Modal = ({isOpen, isClosed, props}) => {
     if (!isOpen) return null;
 
     return( 
-        <div className="overlay" onClick={isClosed}>
-            <div className="content" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-backdrop" onClick={isClosed}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                 <button>Add Favourites</button>
                 <button onClick={isClosed}>Close</button>
                 <section>
