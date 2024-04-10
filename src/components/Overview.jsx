@@ -3,20 +3,18 @@ import Results from './Results';
 import Standings from './Standings';
 
 const Overview = (props) => {
-    const curRaceInfo = props.races.find( (a) => a.raceId == props.curRace);
 
-    if(curRaceInfo!= undefined && curRaceInfo.hasOwnProperty('name')){
-        return(
-            <section className="overview">
-                <div className="seasonRaces">
-                    <h2>{ props.year } Season</h2>
-                    <RaceList races={ props.races } update={ props.update }/>
-                </div>
+    if(props.race != undefined){
+    return(
+        <section className="overview">
+            <div className="seasonRaces">
+                <h2>{ props.year } Season</h2>
+                <RaceList races={ props.races } update={ props.update }/>
+            </div>
 
-                { changeView(props.btnView) }
-            </section>
-        )   
-    }
+            { changeView(props.btnView) }
+        </section>
+    )   }
 
     function changeView(btnView){
         if(btnView == 'standings'){
@@ -26,7 +24,7 @@ const Overview = (props) => {
                 <div className="raceStandings">
                     <div className='standingsHeader'>
                         <h2>Standings</h2>
-                        <p>After Round { curRaceInfo.round }</p>
+                        <p>After Round { props.race.round }</p>
                     </div>
 
                     <Standings />
@@ -39,11 +37,11 @@ const Overview = (props) => {
                     <div className="resultsHeader">
                         <h2>Results</h2>
                             <div className="raceInfo">
-                                <p><a href={ curRaceInfo.url }>{ curRaceInfo.name }</a></p>
-                                <p>Round { curRaceInfo.round }</p>
-                                <p>{ curRaceInfo.year }</p>
-                                <p><a href={ curRaceInfo.circuits.url }>{ curRaceInfo.circuits.name }</a></p>
-                                <p>{ curRaceInfo.date }</p>
+                                <p><a href={ props.race.url }>{ props.race.name }</a></p>
+                                <p>Round { props.race.round }</p>
+                                <p>{ props.race.year }</p>
+                                <p><a href={ props.race.circuits.url }>{ props.race.circuits.name }</a></p>
+                                <p>{ props.race.date }</p>
                             </div>
                     </div>
 

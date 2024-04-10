@@ -4,8 +4,6 @@ import About from './About.jsx'
 import Favourites from './Favourites.jsx'
 import supabase from '/src/supabaseClient.jsx'
 import { useState, useEffect } from 'react'
-import Results from './Results.jsx'
-import Standings from './Standings.jsx'
 
 /**
  * A React component to display the dashboard web page.  
@@ -22,6 +20,7 @@ const Dashboard = () => {
     const [seasonRaces, setSeasonRaces] = useState([]);
     const [raceStandings, setRaceStandings] = useState([]);
     const [raceQualifying, setRaceQualifying] = useState([]);
+    const [race, setRace] = useState([]);
     const [curRace, setCurRace] = useState('1098');
     const [btnView, setBtnView] = useState('results');
 
@@ -29,21 +28,21 @@ const Dashboard = () => {
     useEffect( () => { getSeasonRaces(view); }, [view]);
     useEffect( () => { getRaceResults(curRace); }, [curRace]);
     useEffect( () => { getRaceQualifying(curRace); }, [curRace]);
-    const updateView = (view) => setView(view);
+    useEffect( () => { getRace(curRace); }, [view]);
+    const updateView = (selectedView) => setView(selectedView);
     const updateCurRace= (curRace) => { setBtnView(curRace[0]); setCurRace(curRace[1]); };
-
+  
     return(
         <section className="overview">
             <Header seasons={ seasons } update={ updateView }/>
             { changeView(view) }
         </section>
-    
     )
 
     function changeView(view){
         if(view == "toFavourites") return <Favourites />;
         else if(view == "toAbout") return <About />;
-        else return <Overview year={ view } races={ seasonRaces } btnView={ btnView } curRace={ curRace } results={ raceStandings } qualify={ raceQualifying } update={ updateCurRace }/>;
+        else return <Overview year={ view } races={ seasonRaces } btnView={ btnView } race={ race[0] } results={ raceStandings } qualify={ raceQualifying } update={ updateCurRace }/>;
     }
 
     async function getSeasons(){
@@ -69,6 +68,17 @@ const Dashboard = () => {
         setSeasonRaces(data);
     }
 
+    async function getRace(race){
+        const {data, error} = await supabase
+        .from('races')
+        .select('*, circuits!inner (*)')
+        .eq('raceId', race);
+
+        if(error){ console.error('Failed to retrieve Race.'); return; }
+
+        setRace(data);
+    }
+
     async function getRaceResults(race){
         const {data, error} = await supabase
         .from('results')
@@ -84,7 +94,7 @@ const Dashboard = () => {
     async function getRaceQualifying(race){
         const {data, error} = await supabase
         .from('qualifying')
-        .select('*, races!inner (*), drivers!inner (*)')
+        .select('*, races!inner (*), drivers!inner (*), constructors!inner (*)')
         .eq('races.raceId', race)
         .order('position', { ascending: true });
 
@@ -93,7 +103,5 @@ const Dashboard = () => {
         setRaceQualifying(data);
     }
 }
-
-
 
 export default Dashboard

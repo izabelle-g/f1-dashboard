@@ -1,29 +1,13 @@
-
 const QualifyingListItem = (props) => {
     return(
-        <table>
-            <tr>
-                <th>Pos</th>
-                <th></th>
-                <th></th>
-                <th>Q1</th>
-                <th>Q2</th>
-                <th>Q3</th>
-            </tr>
-            <tbody>
-                { props.qualifying.map((q) => {
-                    <td>
-                        <td> {q.position} </td>
-                        <td> {q.forename} </td>
-                        <td> {q.surname} </td>
-                        <td> {q.q1} </td>
-                        <td> {q.q2} </td>
-                        <td> {q.q3} </td>
-                    </td>
-
-                })};
-            </tbody>
-        </table>
+        <tr>
+            <td>{ props.qualify.position }</td>
+            <td><a href={ props.qualify.drivers.url }>{ props.qualify.drivers.forename } { props.qualify.drivers.surname }</a></td>
+            <td><a href={ props.qualify.constructors.url }>{ props.qualify.constructors.name }</a></td>
+            <td>{ props.qualify.q1 }</td>
+            <td>{ props.qualify.q2 }</td>
+            <td>{ props.qualify.q3 }</td>
+        </tr>
     )
 };
 
