@@ -6,7 +6,7 @@ const Header = (props) => {
     const handleChange = (e) => props.update(e.target.value);
 
     return(
-        <div>
+        <div className="header">
             <h2>F1 Dashboard</h2>
 
             <label htmlFor="seasons">Season</label>

@@ -23,7 +23,6 @@ const Results = (props) => {
                     </tbody>
                 </table>
             </div>
-
             <div className="results">
                 <ResultsCardItem results={ props.results }/>
                 <h2>Results</h2>

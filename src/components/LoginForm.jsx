@@ -20,7 +20,7 @@ const LoginForm = (props) => {
 
                 <div>
                     <button type="button" name="toDashboard" onClick={ handleClick }>Login</button>
-                    <button type="button" placeholder="********" name="toRegistration" onClick={ handleClick }>Register</button>
+                    <button type="button" placeholder="********" name="toRegistration" >Register</button>
                 </div>
             </form>
         </div>

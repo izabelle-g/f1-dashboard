@@ -1,28 +1,28 @@
+import 'reactjs-popup/dist/index.css';
+import Popup from 'reactjs-popup';
 import React, {useState} from "react";
-import Modal from './Modal';
-
-
 
 const Circuits = (props) => {
-    const [showModal, setShowModal] = useState(false);
-    const toggleModal = () => setShowModal(!showModal);
+  const link = props.circuit.url;
     return(
-          <div>
-            <button onClick={toggleModal}> TestButton</button>
-          <Modal isOpen={showModal} isClosed={toggleModal}>
+          <div className="popup-view">
            <div>
                 <div className="details">
                     <h2>Circuit Details</h2>
-                    <p>Name: {props.circuit.name}</p>
+                    <p>Name: {props.name}</p>
                     <p>Location: {props.circuit.location}</p>
                     <p>Country: {props.circuit.country}</p>
-                    <p>URL: {props.circuit.url}</p>
+                    <p><a href={link}>URL</a></p>
                 </div>
             </div>
-            <div><img src={props.image} alt={props.name} /></div>
-          </Modal>
-            
+
+            <div>
+              <div><img src={props.circuit.url} alt={props.circuit.name} /></div>
+              <div><img src={props.circuit.url} alt={props.circuit.map} /></div>
             </div>
+
+            
+          </div>
     );
 };
 
