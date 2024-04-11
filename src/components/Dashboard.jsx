@@ -23,6 +23,7 @@ const Dashboard = () => {
     const [raceStandings, setRaceStandings] = useState([]);
     const [raceQualifying, setRaceQualifying] = useState([]);
     const [driverStandings, setDriverStandings] = useState([]);
+    const [constrStandings, setConstrStandings] = useState([]);
 
     const [race, setRace] = useState([]);
     const [curRace, setCurRace] = useState('1098');
@@ -59,9 +60,12 @@ const Dashboard = () => {
     useEffect( () => { getRaceQualifying(curRace); }, [curRace]);
     useEffect( () => { getRace(curRace); }, [view]);
     useEffect( () => { getDriverStanding(curRace); }, [curRace]);
+    useEffect( () => { getConstrStanding(curRace); }, [curRace]);
 
     const updateView = (selectedView) => setView(selectedView);
     const updateCurRace= (curRace) => { setBtnView(curRace[0]); setCurRace(curRace[1]); };
+
+    console.log(driverStandings);
 
     return(
         <section className="dashboard">
@@ -74,7 +78,7 @@ const Dashboard = () => {
     function changeView(view){
         if(view == "toFavourites") return <Favorites />;
         else if(view == "toAbout") return <About />;
-        else return <Overview year={ view } races={ seasonRaces } btnView={ btnView } race={ race[0] } results={ raceStandings } qualify={ raceQualifying } update={ updateCurRace } addDriverToFaves={addDriverToFaves}/>;
+        else return <Overview year={ view } races={ seasonRaces } btnView={ btnView } race={ race[0] } results={ raceStandings } qualify={ raceQualifying } update={ updateCurRace } addDriverToFaves={addDriverToFaves} standings={ driverStandings } cStandings={ constrStandings }/>;
     }
 
     async function getSeasons(){
@@ -125,12 +129,27 @@ const Dashboard = () => {
 
     async function getDriverStanding(race){
         const {data, error} = await supabase
-            .from('drivers')
-            .select(`(*), drivers!driverId(forename, surname)`)
-            .eq('raceId', race);
-        if(error){ console.error('Failed to retrieve Standings Drivers with id ' + race); return; }
+        .from('driverStandings')
+        .select(`*, drivers!inner (*)`)
+        .eq('raceId', race)
+        .order('position', { ascending: true });
+
+        if(error){ console.error('Failed to retrieve Standings Drivers with race id ' + race); return; }
         
         setDriverStandings(data);
+    }
+
+    async function getConstrStanding(race){
+        const {data, error} = await supabase
+        .from('constructorStandings')
+        .select(`*, constructors!inner (*)`)
+        .eq('raceId', race)
+        .order('position', { ascending: true });
+
+        if(error){ console.error('Failed to retrieve Standings Contructor with race id ' + race); return; }
+        
+        setConstrStandings(data);
+        console.log(data);
     }
 
     async function getRaceQualifying(race){

@@ -10,21 +10,23 @@ const Drivers = (props) => {
 
     return(    
         <tr>
-            <td>{props.driver.drivers.driverId}</td>
-            <Popup  className="popUp" trigger={<td><a href="#" >{name}</a></td>} modal nested>
-            {close=>(
-                <div>
-                    <DriverDetails driver={props.driver.drivers}/>
+            <td>{props.driver.position}</td>
+            <td>
+                <a href={ props.driver.drivers.url }>{props.driver.forename} {props.driver.forename}</a>
+                <Popup  className="popUp" trigger={<td><a href="#" >{name}</a></td>} modal nested>
+                {close=>(
                     <div>
-                        <button onClick={()=> close()}>Close</button>
-                        <button onClick={() => (props.addDriverToFaves)}>Add Favorites</button>
-                    </div>
-            </div>
-            )}
-        </Popup>
-            <td><a href="">{props.driver.forename} {props.driver.forename}</a></td>
-            {/* <td>{props.driver.driverStandings.points}</td> */}
-            {/* <td>{props.driver.wins}</td> */}
+                        <DriverDetails driver={props.driver.drivers}/>
+                        <div>
+                            <button onClick={()=> close()}>Close</button>
+                            <button onClick={() => (props.addDriverToFaves)}>Add Favorites</button>
+                        </div>
+                </div>
+                )}
+                </Popup>
+            </td>
+            {<td> {props.driver.points }</td>}
+            {<td>{props.driver.wins}</td>}
         </tr>
     )
 };
