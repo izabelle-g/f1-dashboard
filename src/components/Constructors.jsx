@@ -1,25 +1,27 @@
-import Modal from "./Modal";
 import React from "react";
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
+import ConstructorDetails from "./ConstructorDetails";
 
 const Constructors = (props) => {
     return(    
         <tr>
             <td>{props.constructor.position}</td>
-            <td>{props.constructor.name}</td>
-            <td>{props.constructor.points}</td>
-            <td>{props.constructor.wins}</td>
+            <Popup className="popUp" trigger={<td><a href="#" >{props.constructor.constructors.name}</a></td>} modal nested>
+            {close=>(
+                <div>
+                    <ConstructorDetails constructor={props.constructor.constructors}/>
+                    <div>
+                        <button onClick={()=> close()}>Close</button>
+                        <button>Add Favorites</button>
+                    </div>
+            </div>
+            )}
+        </Popup>
+            <td>{props.constructor.constructors.name}</td>
+            {/* <td>{props.constructor.points}</td> */}
+            {/* <td>{props.constructor.wins}</td> */}
         </tr>
-        // <Modal isOpen={isOpen} isClosed={isClosed}>
-        //     <div className="details">
-        //         <h2>Constructor Details</h2>
-        //         <p>Name: {props.name}</p>
-        //         <p>Nationality: {props.nationality} </p>
-        //         <p>URL: {props.url}</p>
-        //     </div>
-        //     <div>
-        //         <img src={props.image} alt={props.name} />
-        //     </div>
-        // </Modal>
     )
 }
 

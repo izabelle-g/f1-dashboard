@@ -16,7 +16,7 @@ const Standings = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {props.drivers.map(d => <Drivers driver={d} />  )}
+                    { props.results.map( (d) => <Drivers driver={d} />  )}
                 </tbody>
            </table>
 
@@ -31,7 +31,7 @@ const Standings = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {/* {props.qualify.map((c) => {<Constructors constructor={c}/>})} */}
+                    { props.results.map((c) => <Constructors constructor={c}/> )}
                 </tbody>
            </table>
         </section>

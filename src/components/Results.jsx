@@ -19,7 +19,7 @@ const Results = (props) => {
                         </tr>
                     </thead>
                     <tbody>
-                        { props.qualify.map( (q) => <QualifyingListItem qualify={q}/>) }
+                        { props.qualify.map( (q) => <QualifyingListItem qualify={q} results={}/>) }
                     </tbody>
                 </table>
             </div>
