@@ -13,5 +13,4 @@ const ResultsCardItem = (props) =>{
         </div>
     )
 }
-
 export default ResultsCardItem
