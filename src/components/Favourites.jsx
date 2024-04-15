@@ -1,6 +1,9 @@
 import React from "react";
 
 const Favourites = (props) => {
+    return(
+        <h2>Favourites</h2>
+    )
     /*return(
         <Modal isOpen={isOpen} isClosed={isClosed}>
             <div className="header">

@@ -3,7 +3,9 @@ import SeasonList from "./SeasonList";
 const Header = (props) => {
     const handleClick = (e) => props.update(e.target.name);
 
-    const handleChange = (e) => props.update(e.target.value);
+    const handleChange = (e) => {
+        props.update(e.target.value);
+    }
 
     return(
         <div className="header">

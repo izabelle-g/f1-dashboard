@@ -5,7 +5,7 @@ import supabase from '/src/supabaseClient.jsx'
 import { useState, useEffect } from 'react'
 import Drivers from './Drivers.jsx'
 import FaveDriver from './FaveDriver.jsx'
-import Favorites from './Favorites.jsx'
+import Favourites from './Favourites.jsx'
 
 /**
  * A React component to display the dashboard web page.  
@@ -58,12 +58,18 @@ const Dashboard = () => {
     useEffect( () => { getSeasonRaces(view); }, [view]);
     useEffect( () => { getRaceResults(curRace); }, [curRace]);
     useEffect( () => { getRaceQualifying(curRace); }, [curRace]);
-    useEffect( () => { getRace(curRace); }, [view]);
+    useEffect( () => { getRace(curRace); }, [curRace]);
+    useEffect( () => { getFirstRace(view) },[]);
     useEffect( () => { getDriverStanding(curRace); }, [curRace]);
     useEffect( () => { getConstrStanding(curRace); }, [curRace]);
 
-    const updateView = (selectedView) => setView(selectedView);
-    const updateCurRace= (curRace) => { setBtnView(curRace[0]); setCurRace(curRace[1]); };
+    const updateView = (selectedView) => {
+        setView(selectedView);
+    }
+    const updateCurRace= (race) => { 
+        setBtnView(race[0]); 
+        setCurRace(race[1]); 
+    };
 
     console.log(driverStandings);
 
@@ -76,7 +82,7 @@ const Dashboard = () => {
         </section>
     )
     function changeView(view){
-        if(view == "toFavourites") return <Favorites />;
+        if(view == "toFavourites") return <Favourites />;
         else if(view == "toAbout") return <About />;
         else return <Overview year={ view } races={ seasonRaces } btnView={ btnView } race={ race[0] } results={ raceStandings } qualify={ raceQualifying } update={ updateCurRace } addDriverToFaves={addDriverToFaves} standings={ driverStandings } cStandings={ constrStandings }/>;
     }
@@ -113,6 +119,19 @@ const Dashboard = () => {
         if(error){ console.error('Failed to retrieve Race.'); return; }
 
         setRace(data);
+    }
+
+    async function getFirstRace(year){
+        const {data, error} = await supabase
+        .from('races')
+        .select('raceId')
+        .eq('year', year)
+        .order('round', { ascending: true})
+        .limit(1);
+        
+        if(error){ console.error('Failed to retrieve Race.'); return; }
+
+        setFirstRace(data);
     }
 
     async function getRaceResults(race){
